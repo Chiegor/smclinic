@@ -1,5 +1,6 @@
 package com.smclinic.booking.mapper;
 
+import com.smclinic.booking.model.Booking;
 import com.smclinic.booking.model.Room;
 import com.smclinic.booking.model.dto.RoomDto;
 import org.mapstruct.Mapper;
@@ -20,9 +21,15 @@ public interface RoomMapper {
 
     List<RoomDto> toDtoList(List<Room> rooms);
 
-    @Mapping(target = "isAvailable", source = "available")
-    @Mapping(target = "coworkingSpaceId", source = "space.id")
-    @Mapping(target = "coworkingSpaceName", source = "space.name")
+    @Mapping(target = "isAvailable", ignore = true)
+    @Mapping(target = "coworkingSpaceId", source = "room.space.id")
+    @Mapping(target = "coworkingSpaceName", source = "room.space.name")
     @Mapping(target = "bookings", expression = "java(mapBookings(room.getBookings()))")
     RoomDto toDtoWithAvailability(Room room, boolean available);
+
+    @Mapping(target = "startTime", source = "startTime")
+    @Mapping(target = "endTime", source = "endTime")
+    RoomDto.BookingSlotDto toBookingDTO(Booking booking);
+
+    List<RoomDto.BookingSlotDto> mapBookings(List<Booking> bookings);
 }

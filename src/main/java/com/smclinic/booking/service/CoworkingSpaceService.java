@@ -8,7 +8,6 @@ import com.smclinic.booking.model.dto.CoworkingSpaceDto;
 import com.smclinic.booking.model.dto.request.CreateSpaceRequest;
 import com.smclinic.booking.model.dto.request.UpdateCoworkingSpaceRequest;
 import com.smclinic.booking.repository.CoworkingSpaceRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +16,15 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class CoworkingSpaceService {
 
     private final CoworkingSpaceRepository spaceRepository;
     private final CoworkingSpaceMapper spaceMapper;
+
+    public CoworkingSpaceService(CoworkingSpaceRepository spaceRepository, CoworkingSpaceMapper spaceMapper) {
+        this.spaceRepository = spaceRepository;
+        this.spaceMapper = spaceMapper;
+    }
 
     @Transactional(readOnly = true)
     public List<CoworkingSpaceDto> getAllSpaces() {

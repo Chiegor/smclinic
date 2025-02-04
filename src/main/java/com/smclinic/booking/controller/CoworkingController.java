@@ -7,7 +7,6 @@ import com.smclinic.booking.service.CoworkingSpaceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,10 +26,13 @@ import java.util.UUID;
 @RestController
 @RequestMapping("coworking")
 @Validated
-@AllArgsConstructor
 public class CoworkingController {
 
     private final CoworkingSpaceService spaceService;
+
+    public CoworkingController(CoworkingSpaceService spaceService) {
+        this.spaceService = spaceService;
+    }
 
     @Operation(summary = "Создать новый коворкинг")
     @ApiResponse(responseCode = "201", description = "Коворкинг создан")

@@ -12,6 +12,8 @@ public interface BookingMapper {
     BookingMapper INSTANCE = Mappers.getMapper(BookingMapper.class);
 
     @Mapping(target = "roomId", source = "room.id")
+    @Mapping(target = "formattedStart", source = "startTime")
+    @Mapping(target = "formattedEnd", source = "endTime")
     BookingDto toDto(Booking booking);
 
 }
