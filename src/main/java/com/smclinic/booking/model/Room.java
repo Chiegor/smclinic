@@ -61,7 +61,7 @@ public class Room {
     private LocalDateTime updatedAt;
 
     @Version
-    private Long version;
+    private Long version = 0L;
 
     @Min(value = 1, message = "Минимальное количество мест - 1")
     @Max(value = 20, message = "Максимальное количество мест - 20")

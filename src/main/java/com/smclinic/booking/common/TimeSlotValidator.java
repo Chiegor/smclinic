@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Component
 public class TimeSlotValidator {
+
     public void validateTimeSlot(LocalDateTime start, LocalDateTime end) {
         validateTimeAlignment(start);
         validateTimeAlignment(end);

@@ -8,8 +8,14 @@ public record RoomDto(UUID id,
                       int seats,
                       UUID coworkingSpaceId,
                       String coworkingSpaceName,
-                      boolean isAvailable,
+                      Boolean isAvailable,
                       List<BookingSlotDto> bookings) {
+
+    public RoomDto {
+        if (isAvailable == null) {
+            isAvailable = true; // todo Дефолтное значение, надо в будущем исправить логику
+        }
+    }
 
     public record BookingSlotDto(LocalDateTime startTime,
                                  LocalDateTime endTime) {

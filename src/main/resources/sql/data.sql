@@ -1,3 +1,7 @@
+DELETE FROM coworking_spaces;
+DELETE FROM rooms;
+DELETE FROM bookings;
+
 INSERT INTO coworking_spaces (id, name, address, created_at, updated_at, version)
 VALUES
     ('550e8400-e29b-41d4-a716-446655440000', 'WeWork', 'Москва, ул. Примерная, д. 1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),

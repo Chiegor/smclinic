@@ -15,6 +15,7 @@ public interface RoomMapper {
 
     RoomMapper INSTANCE = Mappers.getMapper(RoomMapper.class);
 
+    @Mapping(target = "isAvailable", ignore = true)
     @Mapping(target = "coworkingSpaceId", source = "space.id")
     @Mapping(target = "coworkingSpaceName", source = "space.name")
     RoomDto toDto(Room room);
