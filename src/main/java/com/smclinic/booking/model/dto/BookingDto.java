@@ -6,7 +6,7 @@ import java.util.UUID;
 public record BookingDto(
         UUID id,
         UUID roomId,
-        String formattedStart,
-        String formattedEnd,
+        LocalDateTime startTime,
+        LocalDateTime endTime,
         LocalDateTime createdAt) {
 }
