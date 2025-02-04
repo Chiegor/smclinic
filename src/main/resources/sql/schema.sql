@@ -1,4 +1,4 @@
-CREATE TABLE coworking_spaces (
+CREATE TABLE IF NOT EXISTS coworking_spaces (
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     address VARCHAR(255) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE coworking_spaces (
     version BIGINT DEFAULT 0
 );
 
-CREATE TABLE rooms (
+CREATE TABLE IF NOT EXISTS rooms (
     id UUID PRIMARY KEY,
     room_name VARCHAR(100) NOT NULL,
     space_id UUID NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE rooms (
     FOREIGN KEY (space_id) REFERENCES coworking_spaces(id) ON DELETE CASCADE
 );
 
-CREATE TABLE bookings (
+CREATE TABLE IF NOT EXISTS bookings (
     id UUID PRIMARY KEY,
     room_id UUID NOT NULL,
     start_time TIMESTAMP NOT NULL,
