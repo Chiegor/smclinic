@@ -4,6 +4,7 @@ import com.smclinic.booking.model.dto.BookingDto;
 import com.smclinic.booking.model.dto.RoomDto;
 import com.smclinic.booking.model.dto.RoomSearchFilter;
 import com.smclinic.booking.model.dto.request.CreateBookingRequest;
+import com.smclinic.booking.service.BookingService;
 import com.smclinic.booking.service.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +28,7 @@ import java.util.List;
 public class RoomController {
 
     private final RoomService roomService;
+    private final BookingService bookingService;
 
     @GetMapping("available")
     public ResponseEntity<List<RoomDto>> findAvailableRooms(@Valid RoomSearchFilter filter) {
@@ -37,7 +39,7 @@ public class RoomController {
     @ApiResponse(responseCode = "201", description = "Бронирование создано")
     @PostMapping("create")
     public ResponseEntity<BookingDto> createBooking(@Valid @RequestBody CreateBookingRequest request) {
-        BookingDto booking = roomService.createBooking(request);
+        BookingDto booking = bookingService.createBooking(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(booking);

@@ -31,11 +31,6 @@ public class RoomService {
     private final CoworkingSpaceRepository spaceRepository;
     private final RoomMapper roomMapper;
     private final BookingRepository bookingRepository;
-    private final BookingService bookingService;
-
-    public BookingDto createBooking(CreateBookingRequest request) {
-        return bookingService.createBooking(request);
-    }
 
     @Transactional(readOnly = true)
     public List<RoomDto> findAvailableRooms(RoomSearchFilter filter) {
