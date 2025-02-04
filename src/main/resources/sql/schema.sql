@@ -1,0 +1,28 @@
+CREATE TABLE IF NOT EXISTS coworking_spaces (
+    id UUID PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    version BIGINT DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS rooms (
+    id UUID PRIMARY KEY,
+    room_name VARCHAR(100) NOT NULL,
+    space_id UUID NOT NULL,
+    seats INT CHECK (seats >= 1 AND seats <= 20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    version BIGINT DEFAULT 0,
+    FOREIGN KEY (space_id) REFERENCES coworking_spaces(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS bookings (
+    id UUID PRIMARY KEY,
+    room_id UUID NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
+);

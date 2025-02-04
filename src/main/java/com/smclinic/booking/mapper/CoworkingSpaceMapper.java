@@ -9,19 +9,24 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Component
 @Mapper(componentModel = "spring")
 public interface CoworkingSpaceMapper {
+
     @Mapping(target = "roomIds", source = "rooms")
     CoworkingSpaceDto toDto(CoworkingSpace entity);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "rooms", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "version", ignore = true)
     CoworkingSpace toEntity(CoworkingSpaceDto.CreateRequest dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

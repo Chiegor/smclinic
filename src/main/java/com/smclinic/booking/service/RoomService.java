@@ -6,14 +6,13 @@ import com.smclinic.booking.exception.SpaceNotFoundException;
 import com.smclinic.booking.mapper.RoomMapper;
 import com.smclinic.booking.model.CoworkingSpace;
 import com.smclinic.booking.model.Room;
-import com.smclinic.booking.model.dto.BookingDto;
 import com.smclinic.booking.model.dto.RoomDto;
 import com.smclinic.booking.model.dto.RoomSearchFilter;
-import com.smclinic.booking.model.dto.request.CreateBookingRequest;
 import com.smclinic.booking.model.dto.request.CreateRoomRequest;
 import com.smclinic.booking.model.dto.request.UpdateRoomRequest;
 import com.smclinic.booking.repository.BookingRepository;
 import com.smclinic.booking.repository.CoworkingSpaceRepository;
+import com.smclinic.booking.repository.RoomDAO;
 import com.smclinic.booking.repository.RoomRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,15 +30,15 @@ public class RoomService {
     private final CoworkingSpaceRepository spaceRepository;
     private final RoomMapper roomMapper;
     private final BookingRepository bookingRepository;
-    private final BookingService bookingService;
+    private final RoomDAO roomDAO; // просто как вариант как еще можно реализовать доступ к БД
 
-    public BookingDto createBooking(CreateBookingRequest request) {
-        return bookingService.createBooking(request);
+    public List<RoomDto> findAllAvailableRooms() {
+        return roomDAO.findAvailableRooms().stream().map(roomMapper::toDto).toList();
     }
 
     @Transactional(readOnly = true)
-    public List<RoomDto> findAvailableRooms(RoomSearchFilter filter) {
-        List<Room> rooms = roomRepository.findAvailableRooms(
+    public List<RoomDto> findAvailableRoomsWithFilter(RoomSearchFilter filter) {
+        List<Room> rooms = roomRepository.findAvailableRoomsWithFilter(
                 filter.minSeats(),
                 filter.startTime(),
                 filter.endTime()
@@ -60,7 +59,7 @@ public class RoomService {
     }
 
     public boolean isRoomAvailable(Room room, LocalDateTime start, LocalDateTime end) {
-        return !bookingRepository.existsByRoomAndTimeRange(
+        return bookingRepository.existsByRoomAndTimeRange(
                 room.getId(),
                 start,
                 end

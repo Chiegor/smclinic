@@ -62,4 +62,10 @@ public class Booking {
             throw new IllegalArgumentException("Время должно быть указано с интервалом в 30 минут.");
         }
     }
+
+    public Booking(Room room, LocalDateTime startTime, LocalDateTime endTime) {
+        this.room = room;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }

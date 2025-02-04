@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -29,6 +30,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Slf4j
+@DynamicUpdate
 public class CoworkingSpace {
 
     @Id
@@ -51,5 +53,5 @@ public class CoworkingSpace {
     private LocalDateTime updatedAt;
 
     @Version
-    private Long version;
+    private Long version = 0L;
 }
