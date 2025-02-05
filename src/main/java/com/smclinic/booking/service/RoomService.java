@@ -41,7 +41,8 @@ public class RoomService {
         List<Room> rooms = roomRepository.findAvailableRoomsWithFilter(
                 filter.minSeats(),
                 filter.startTime(),
-                filter.endTime()
+                filter.endTime(),
+                filter.space()
         );
         return rooms.stream()
                 .map(room -> {
