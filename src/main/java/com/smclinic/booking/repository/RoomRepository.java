@@ -1,9 +1,6 @@
 package com.smclinic.booking.repository;
 
 import com.smclinic.booking.model.Room;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,15 +16,18 @@ public interface RoomRepository extends JpaRepository<Room, UUID> {
     List<Room> findBySpaceId(UUID spaceId);
 
     @Query("SELECT r FROM Room r WHERE " +
-            "r.seats >= :minSeats AND " +
+            "(:minSeats IS NULL OR r.seats >= :minSeats) AND " +
+            "(:space IS NULL OR r.space.name = :space) AND " +
             "NOT EXISTS (" +
             "   SELECT b FROM Booking b WHERE " +
             "   b.room = r AND " +
-            "   (b.startTime < :endTime AND b.endTime > :startTime)" +
+            "   (:startTime IS NULL OR :endTime IS NULL OR " +
+            "   (b.startTime < :endTime AND b.endTime > :startTime))" +
             ")")
     List<Room> findAvailableRoomsWithFilter(
-            @Param("minSeats") int minSeats,
+            @Param("minSeats") Integer minSeats,
             @Param("startTime") LocalDateTime startTime,
-            @Param("endTime") LocalDateTime endTime
+            @Param("endTime") LocalDateTime endTime,
+            @Param("space") String space
     );
 }
