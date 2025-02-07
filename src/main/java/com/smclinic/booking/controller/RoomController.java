@@ -3,7 +3,6 @@ package com.smclinic.booking.controller;
 import com.smclinic.booking.model.dto.RoomDto;
 import com.smclinic.booking.model.dto.RoomSearchFilter;
 import com.smclinic.booking.service.RoomService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;

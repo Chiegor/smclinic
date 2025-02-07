@@ -6,14 +6,11 @@ import com.smclinic.booking.model.dto.RoomDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface RoomMapper {
-
-    RoomMapper INSTANCE = Mappers.getMapper(RoomMapper.class);
 
     @Mapping(target = "isAvailable", ignore = true)
     @Mapping(target = "coworkingSpaceId", source = "space.id")

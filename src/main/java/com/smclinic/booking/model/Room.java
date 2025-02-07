@@ -33,7 +33,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@Slf4j
 public class Room {
 
     @Id
