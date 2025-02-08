@@ -12,6 +12,7 @@ import com.smclinic.booking.repository.BookingRepository;
 import com.smclinic.booking.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -24,7 +25,7 @@ public class BookingService {
     private final TimeSlotValidator timeSlotValidator;
     private final RoomService roomService;
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ, timeout = 30)
     public BookingDto createBooking(CreateBookingRequest request) {
         Room room = roomRepository.findById(request.roomId())
                 .orElseThrow(() -> new RoomNotFoundException(request.roomId()));
