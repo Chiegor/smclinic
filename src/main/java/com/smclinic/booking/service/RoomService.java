@@ -14,16 +14,20 @@ import com.smclinic.booking.repository.BookingRepository;
 import com.smclinic.booking.repository.CoworkingSpaceRepository;
 import com.smclinic.booking.repository.RoomDAO;
 import com.smclinic.booking.repository.RoomRepository;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class RoomService {
 
     private final RoomRepository roomRepository;
@@ -36,6 +40,7 @@ public class RoomService {
         return roomDAO.findAvailableRooms().stream().map(roomMapper::toDto).toList();
     }
 
+    @Bulkhead(name = "rooms", fallbackMethod = "fallbackRooms", type = Bulkhead.Type.SEMAPHORE)
     @Transactional(readOnly = true)
     public List<RoomDto> findAvailableRoomsWithFilter(RoomSearchFilter filter) {
         List<Room> rooms = roomRepository.findAvailableRoomsWithFilter(
@@ -50,6 +55,11 @@ public class RoomService {
                     return roomMapper.toDtoWithAvailability(room, isAvailable);
                 })
                 .toList();
+    }
+
+    public List<RoomDto> fallbackRooms(RoomSearchFilter filter, Throwable t) {
+        log.warn("Bulkhead 'rooms' is full. Fallback method called.", t);
+        return new ArrayList<>();
     }
 
     @Transactional(readOnly = true)
