@@ -5,17 +5,23 @@ import com.smclinic.booking.exception.SpaceNotFoundException;
 import com.smclinic.booking.mapper.CoworkingSpaceMapper;
 import com.smclinic.booking.model.CoworkingSpace;
 import com.smclinic.booking.model.dto.CoworkingSpaceDto;
+import com.smclinic.booking.model.dto.RoomDto;
+import com.smclinic.booking.model.dto.RoomSearchFilter;
 import com.smclinic.booking.model.dto.request.CreateSpaceRequest;
 import com.smclinic.booking.model.dto.request.UpdateCoworkingSpaceRequest;
 import com.smclinic.booking.repository.CoworkingSpaceRepository;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class CoworkingSpaceService {
 
     private final CoworkingSpaceRepository spaceRepository;
@@ -33,6 +39,7 @@ public class CoworkingSpaceService {
                 .toList();
     }
 
+    @Bulkhead(name = "space", fallbackMethod = "fallbackSpace", type = Bulkhead.Type.THREADPOOL)
     @Transactional(readOnly = true)
     public List<CoworkingSpaceDto> getAllSpaces(String search) {
         if (search == null || search.isBlank()) {
@@ -44,6 +51,11 @@ public class CoworkingSpaceService {
                 .stream()
                 .map(spaceMapper::toDto)
                 .toList();
+    }
+
+    public List<CoworkingSpaceDto> fallbackSpace(String search, Throwable t) {
+        log.warn("Bulkhead 'space' is full. Fallback method called.", t);
+        return new ArrayList<>();
     }
 
     @Transactional(readOnly = true)
